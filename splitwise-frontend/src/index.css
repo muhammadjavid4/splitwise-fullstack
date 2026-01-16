@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* GLOBAL STYLES */
+body {
+  @apply bg-slate-950 text-white;
+}
