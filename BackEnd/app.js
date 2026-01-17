@@ -70,20 +70,24 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow server-to-server / Postman requests
       if (!origin) return callback(null, true);
 
-      if (allowedOrigins.includes(origin)) {
+      // Allow all Vercel preview + prod URLs
+      if (
+        origin.endsWith(".vercel.app") ||
+        origin === "https://splitwise-fullstack.vercel.app"
+      ) {
         return callback(null, true);
-      } else {
-        return callback(new Error("Not allowed by CORS"));
       }
+
+      return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 
 /* ======================================================
    🔥 MIDDLEWARES
