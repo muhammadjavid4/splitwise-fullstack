@@ -465,7 +465,7 @@
 
 
 import Navbar from "../components/layout/Navbar";
-import { Link } from "react-router-dom"; // ✅ ONLY NEW IMPORT
+import { Link } from "react-router-dom";
 import {
   FiUsers,
   FiTrendingUp,
@@ -529,10 +529,7 @@ export default function Landing() {
           animate="visible"
           variants={stagger}
         >
-          <motion.h1
-            variants={fadeUp}
-            className="text-5xl md:text-6xl font-extrabold leading-tight"
-          >
+          <motion.h1 variants={fadeUp} className="text-5xl md:text-6xl font-extrabold leading-tight">
             Split expenses. <br />
             <span className="text-cyan-400">Not friendships.</span>
           </motion.h1>
@@ -546,19 +543,13 @@ export default function Landing() {
             whether it’s trips, rent, food, or daily spending.
           </motion.p>
 
-          <motion.div
-            variants={fadeUp}
-            transition={{ delay: 0.2 }}
-            className="mt-10 flex justify-center gap-4"
-          >
-            {/* ✅ FIXED */}
+          <motion.div variants={fadeUp} transition={{ delay: 0.2 }} className="mt-10 flex justify-center gap-4">
             <Link
               to="/register"
               className="px-8 py-3 rounded-xl bg-cyan-500 text-black font-semibold hover:bg-cyan-400 hover:scale-105 transition"
             >
               Get Started Free
             </Link>
-
             <Link
               to="/login"
               className="px-8 py-3 rounded-xl border border-slate-700 text-white hover:bg-slate-800 transition"
@@ -567,43 +558,6 @@ export default function Landing() {
             </Link>
           </motion.div>
         </motion.div>
-      </section>
-
-      {/* IMAGE BREAK */}
-      <motion.section
-        className="max-w-6xl mx-auto px-6"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeUp}
-      >
-        <img
-          src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d"
-          alt="group"
-          className="rounded-3xl shadow-lg opacity-90 hover:opacity-100 transition"
-        />
-      </motion.section>
-
-      {/* FEATURES */}
-      <section className="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-3 gap-8">
-        {[
-          { title: "Group Expenses", desc: "Create groups and track shared expenses effortlessly." },
-          { title: "Instant Balances", desc: "Know exactly who owes whom, anytime, anywhere." },
-          { title: "Easy Settlements", desc: "Settle balances quickly with minimum transactions." },
-        ].map((item, i) => (
-          <motion.div
-            key={i}
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}
-            className="bg-slate-900 border border-slate-800 rounded-2xl p-8 hover:border-cyan-500 hover:-translate-y-2 transition-all duration-300"
-          >
-            <h3 className="text-xl font-semibold text-cyan-400">{item.title}</h3>
-            <p className="mt-4 text-slate-400">{item.desc}</p>
-          </motion.div>
-        ))}
       </section>
 
       {/* FINAL CTA */}
@@ -623,20 +577,53 @@ export default function Landing() {
           animate={{ scale: [1, 1.03, 1] }}
           transition={{ repeat: Infinity, duration: 3 }}
         >
-          {/* ✅ FIXED */}
           <Link
             to="/register"
             className="px-10 py-4 rounded-2xl bg-cyan-500 text-black font-bold hover:bg-cyan-400 hover:scale-105 transition"
           >
             Start Free
           </Link>
-
           <span className="flex items-center gap-2 text-slate-400">
             <FiCheckCircle className="text-cyan-400" />
             No credit card required
           </span>
         </motion.div>
       </motion.section>
+
+      {/* FOOTER — 100% ORIGINAL */}
+      <motion.footer
+        className="border-t border-slate-800 py-12"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fade}
+      >
+        <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-10 text-center md:text-left">
+          <div>
+            <h3 className="text-xl font-bold text-cyan-400">Muhammad Javid Pasha</h3>
+            <p className="mt-3 text-slate-400 max-w-md">
+              Full-Stack Developer focused on building clean, scalable,
+              and user-friendly web applications.
+            </p>
+          </div>
+
+          <div>
+            <p className="text-slate-300 font-semibold mb-4">Connect with me</p>
+            <div className="flex justify-center md:justify-start gap-6 text-2xl">
+              <a href="https://linkedin.com/in/muhammad-javid-pasha-b524881b6/" target="_blank"><FaLinkedin /></a>
+              <a href="https://instagram.com/javeed_salafi" target="_blank"><FaInstagram /></a>
+              <a href="https://github.com/muhammadjavid4" target="_blank"><FaGithub /></a>
+              <a href="https://x.com/gadget_bhayya_0" target="_blank"><FaXTwitter /></a>
+              <a href="https://leetcode.com/muhammad_javid_pasha/" target="_blank"><SiLeetcode /></a>
+              <a href="mailto:muhammadjavid622@gmail.com"><FaEnvelope /></a>
+            </div>
+          </div>
+        </div>
+
+        <p className="mt-10 text-center text-slate-500 text-sm">
+          © {new Date().getFullYear()} SplitWise. Crafted with care.
+        </p>
+      </motion.footer>
     </>
   );
 }
