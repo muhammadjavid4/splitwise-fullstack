@@ -285,7 +285,140 @@
 //   );
 // }
 
+// import { Link, useLocation, useNavigate } from "react-router-dom";
+// import useUserStore from "../../store/user.store";
+// import { logoutApi } from "../../features/auth/auth.api";
+// import {
+//   FiLogIn,
+//   FiUserPlus,
+//   FiGrid,
+//   FiLogOut,
+// } from "react-icons/fi";
+// import NotificationBell from "./NotificationBell";
+
+
+// export default function Navbar({ onDashboardClick }) {
+//   const navigate = useNavigate();
+//   const location = useLocation();
+//   const { isAuth, logout } = useUserStore();
+
+//   const isDashboard = location.pathname === "/dashboard";
+
+//   const handleLogout = async () => {
+//     try {
+//       await logoutApi();
+//     } catch (e) {
+//       // ignore backend error
+//     } finally {
+//       logout();
+//       navigate("/login");
+//     }
+//   };
+
+//   return (
+//     <>
+//       {/* 🔥 TOP GLOW (softened) */}
+//       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[420px] h-[70px] bg-cyan-500/15 blur-3xl z-40 pointer-events-none" />
+
+//       <nav className="sticky top-0 z-50 bg-slate-950/85 backdrop-blur-md border-b border-slate-800">
+//         <div className="max-w-7xl mx-auto px-6 h-[72px] flex justify-between items-center">
+
+//           {/* LOGO */}
+//           <Link
+//             to="/"
+//             className="text-xl font-bold text-cyan-400 relative group tracking-wide"
+//           >
+//             Split<span className="text-white">Wise</span>
+//             <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-cyan-400 transition-all duration-300 group-hover:w-full" />
+//           </Link>
+
+//           {/* RIGHT SIDE */}
+//           {!isAuth ? (
+//             <div className="flex gap-4 items-center">
+
+//               {/* LOGIN */}
+//               <Link
+//                 to="/login"
+//                 className="relative group flex items-center gap-2 text-slate-300 hover:text-white transition"
+//               >
+//                 <FiLogIn />
+//                 Login
+//                 <span className="absolute left-1/2 -bottom-1 w-0 h-[2px] bg-cyan-400 transition-all duration-300 group-hover:w-full group-hover:left-0" />
+//               </Link>
+
+//               {/* REGISTER */}
+//               <Link
+//                 to="/register"
+//                 className="relative px-4 py-2 rounded-lg bg-cyan-500 text-black font-semibold
+//                            hover:bg-cyan-400 transition-all duration-200
+//                            active:scale-95 shadow-lg shadow-cyan-500/20"
+//               >
+//                 <span className="relative z-10 flex items-center gap-2">
+//                   <FiUserPlus />
+//                   Get Started
+//                 </span>
+//               </Link>
+//             </div>
+//           ) : (
+//             <div className="flex gap-4 items-center">
+
+//               {/* DASHBOARD */}
+//               <button
+//                 onClick={() => {
+//                   onDashboardClick?.();
+//                   navigate("/dashboard");
+//                 }}
+//                 className={`
+//                   group relative flex items-center gap-2 px-4 py-2 rounded-lg
+//                   transition-all duration-200
+//                   ${isDashboard
+//                     ? "text-cyan-400 bg-cyan-500/10"
+//                     : "text-slate-300 hover:text-white hover:bg-white/5"}
+//                   active:scale-95
+//                 `}
+//               >
+//                 <FiGrid />
+//                 Dashboard
+
+//                 {/* SMOOTH UNDERLINE */}
+//                 <span
+//                   className={`
+//                     absolute left-0 bottom-0 h-[2px] bg-cyan-400 rounded-full
+//                     transition-all duration-300
+//                     ${isDashboard
+//                       ? "w-full shadow-[0_0_10px_rgba(34,211,238,0.8)]"
+//                       : "w-0 group-hover:w-full"}
+//                   `}
+//                 />
+//               </button>
+//               {/* 🔔 NOTIFICATION BELL */}
+//               <NotificationBell
+//                 onClick={() => navigate("/notifications")}
+//               />
+
+//               {/* LOGOUT */}
+//               <button
+//                 onClick={handleLogout}
+//                 className="px-4 py-2 rounded-lg
+//                            bg-red-500/10 text-red-400
+//                            hover:bg-red-500/20 hover:text-red-300
+//                            transition-all duration-200
+//                            active:scale-95
+//                            flex items-center gap-2"
+//               >
+//                 <FiLogOut />
+//                 Logout
+//               </button>
+//             </div>
+//           )}
+//         </div>
+//       </nav>
+//     </>
+//   );
+// }
+
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import useUserStore from "../../store/user.store";
 import { logoutApi } from "../../features/auth/auth.api";
 import {
@@ -293,124 +426,186 @@ import {
   FiUserPlus,
   FiGrid,
   FiLogOut,
+  FiMenu,
+  FiX,
+  FiChevronDown,
 } from "react-icons/fi";
 import NotificationBell from "./NotificationBell";
-
 
 export default function Navbar({ onDashboardClick }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuth, logout } = useUserStore();
+  const { isAuth, logout, user } = useUserStore();
+
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const isDashboard = location.pathname === "/dashboard";
 
   const handleLogout = async () => {
     try {
       await logoutApi();
-    } catch (e) {
-      // ignore backend error
-    } finally {
+    } catch (e) {}
+    finally {
       logout();
       navigate("/login");
     }
   };
 
+  // 🔹 USER INITIALS
+  const getInitials = () => {
+    if (!user?.name) return "U";
+    const parts = user.name.trim().split(" ");
+    return ((parts[0]?.[0] || "") + (parts[1]?.[0] || "")).toUpperCase();
+  };
+
   return (
     <>
-      {/* 🔥 TOP GLOW (softened) */}
+      {/* 🔥 TOP GLOW */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[420px] h-[70px] bg-cyan-500/15 blur-3xl z-40 pointer-events-none" />
 
-      <nav className="sticky top-0 z-50 bg-slate-950/85 backdrop-blur-md border-b border-slate-800">
-        <div className="max-w-7xl mx-auto px-6 h-[72px] flex justify-between items-center">
+      <nav className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 h-[72px] flex justify-between items-center">
 
           {/* LOGO */}
-          <Link
-            to="/"
-            className="text-xl font-bold text-cyan-400 relative group tracking-wide"
-          >
+          <Link to="/" className="text-xl font-bold text-cyan-400">
             Split<span className="text-white">Wise</span>
-            <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-cyan-400 transition-all duration-300 group-hover:w-full" />
           </Link>
 
-          {/* RIGHT SIDE */}
-          {!isAuth ? (
-            <div className="flex gap-4 items-center">
+          {/* DESKTOP */}
+          <div className="hidden md:flex gap-4 items-center">
+            {!isAuth ? (
+              <>
+                <Link to="/login" className="flex items-center gap-2 text-slate-300 hover:text-white">
+                  <FiLogIn /> Login
+                </Link>
 
-              {/* LOGIN */}
-              <Link
-                to="/login"
-                className="relative group flex items-center gap-2 text-slate-300 hover:text-white transition"
-              >
-                <FiLogIn />
-                Login
-                <span className="absolute left-1/2 -bottom-1 w-0 h-[2px] bg-cyan-400 transition-all duration-300 group-hover:w-full group-hover:left-0" />
-              </Link>
+                <Link to="/register" className="px-4 py-2 rounded-lg bg-cyan-500 text-black font-semibold hover:bg-cyan-400">
+                  <FiUserPlus /> Get Started
+                </Link>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => {
+                    onDashboardClick?.();
+                    navigate("/dashboard");
+                  }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
+                    isDashboard
+                      ? "text-cyan-400 bg-cyan-500/10"
+                      : "text-slate-300 hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  <FiGrid /> Dashboard
+                </button>
 
-              {/* REGISTER */}
-              <Link
-                to="/register"
-                className="relative px-4 py-2 rounded-lg bg-cyan-500 text-black font-semibold
-                           hover:bg-cyan-400 transition-all duration-200
-                           active:scale-95 shadow-lg shadow-cyan-500/20"
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  <FiUserPlus />
-                  Get Started
-                </span>
-              </Link>
-            </div>
-          ) : (
-            <div className="flex gap-4 items-center">
+                <NotificationBell onClick={() => navigate("/notifications")} />
 
-              {/* DASHBOARD */}
-              <button
-                onClick={() => {
-                  onDashboardClick?.();
-                  navigate("/dashboard");
-                }}
-                className={`
-                  group relative flex items-center gap-2 px-4 py-2 rounded-lg
-                  transition-all duration-200
-                  ${isDashboard
-                    ? "text-cyan-400 bg-cyan-500/10"
-                    : "text-slate-300 hover:text-white hover:bg-white/5"}
-                  active:scale-95
-                `}
-              >
-                <FiGrid />
-                Dashboard
+                {/* PROFILE DESKTOP */}
+                <div className="relative">
+                  <button
+                    onClick={() => setProfileOpen(!profileOpen)}
+                    className="flex items-center gap-2"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-cyan-500 text-black flex items-center justify-center font-bold">
+                      {getInitials()}
+                    </div>
+                    <FiChevronDown className="text-slate-300" />
+                  </button>
 
-                {/* SMOOTH UNDERLINE */}
-                <span
-                  className={`
-                    absolute left-0 bottom-0 h-[2px] bg-cyan-400 rounded-full
-                    transition-all duration-300
-                    ${isDashboard
-                      ? "w-full shadow-[0_0_10px_rgba(34,211,238,0.8)]"
-                      : "w-0 group-hover:w-full"}
-                  `}
-                />
-              </button>
-              {/* 🔔 NOTIFICATION BELL */}
-              <NotificationBell
-                onClick={() => navigate("/notifications")}
-              />
+                  {profileOpen && (
+                    <div className="absolute right-0 mt-3 w-48 rounded-xl bg-slate-900 border border-slate-800 shadow-xl">
+                      <div className="px-4 py-3 border-b border-slate-800">
+                        <p className="text-sm text-white font-semibold">{user?.name}</p>
+                      </div>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full px-4 py-3 text-left text-red-400 hover:bg-red-500/10 flex items-center gap-2"
+                      >
+                        <FiLogOut /> Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
 
-              {/* LOGOUT */}
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 rounded-lg
-                           bg-red-500/10 text-red-400
-                           hover:bg-red-500/20 hover:text-red-300
-                           transition-all duration-200
-                           active:scale-95
-                           flex items-center gap-2"
-              >
-                <FiLogOut />
-                Logout
-              </button>
-            </div>
-          )}
+          {/* MOBILE TOGGLE */}
+          <button
+            className="md:hidden text-slate-200 text-2xl active:scale-90 transition"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? <FiX /> : <FiMenu />}
+          </button>
+        </div>
+
+        {/* 📱 MOBILE MENU – POLISHED */}
+        <div
+          className={`md:hidden overflow-hidden transition-all duration-300 ${
+            menuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+          } bg-slate-900 border-t border-slate-800`}
+        >
+          <div className="px-4 py-5 space-y-3">
+            {!isAuth ? (
+              <>
+                <Link
+                  to="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="block px-4 py-3 rounded-lg bg-slate-800 text-slate-200 active:bg-slate-700"
+                >
+                  <FiLogIn className="inline mr-2" /> Login
+                </Link>
+
+                <Link
+                  to="/register"
+                  onClick={() => setMenuOpen(false)}
+                  className="block px-4 py-3 rounded-lg bg-cyan-500 text-black font-semibold active:bg-cyan-400"
+                >
+                  <FiUserPlus className="inline mr-2" /> Get Started
+                </Link>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => {
+                    navigate("/dashboard");
+                    setMenuOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-3 rounded-lg bg-slate-800 text-slate-200 active:bg-slate-700"
+                >
+                  <FiGrid className="inline mr-2" /> Dashboard
+                </button>
+
+                <button
+                  onClick={() => {
+                    navigate("/notifications");
+                    setMenuOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-3 rounded-lg bg-slate-800 text-slate-200 active:bg-slate-700"
+                >
+                  🔔 Notifications
+                </button>
+
+                {/* MOBILE PROFILE CARD */}
+                <div className="mt-4 p-4 rounded-xl bg-slate-800 flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-cyan-500 text-black flex items-center justify-center font-bold text-lg">
+                    {getInitials()}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-white font-semibold">{user?.name}</p>
+                    <button
+                      onClick={handleLogout}
+                      className="text-red-400 text-sm flex items-center gap-1 mt-1"
+                    >
+                      <FiLogOut /> Logout
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </nav>
     </>
