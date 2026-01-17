@@ -2,7 +2,7 @@ import axios from "axios";
 import useUserStore from "../store/user.store";
 
 const api = axios.create({
-  baseURL: "https://splitwise-fullstack.onrender.com",
+  baseURL: "https://splitwise-fullstack.onrender.com/api",
 });
 
 api.interceptors.request.use((config) => {
