@@ -3,6 +3,7 @@ import { loginApi } from "./auth.api";
 import useUserStore from "../../store/user.store";
 import { useNavigate, Link } from "react-router-dom";
 import { FiMail, FiLock, FiLogIn, FiUserPlus } from "react-icons/fi";
+import toast from "react-hot-toast";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ export default function Login() {
       // res.data = { user, token }
 
       login(res.data.user, res.data.token); // ✅ TOKEN STORE
+      toast.success("Logged in successfully");
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");

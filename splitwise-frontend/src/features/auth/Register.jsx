@@ -2,6 +2,7 @@ import { useState } from "react";
 import { registerApi } from "./auth.api";
 import { useNavigate, Link } from "react-router-dom";
 import { FiUser, FiMail, FiLock, FiUserCheck, FiLogIn } from "react-icons/fi";
+import toast from "react-hot-toast";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export default function Register() {
     try {
       await registerApi(form);
       navigate("/login");
+      toast.success("Registered successfully. Please login.");
     } catch (err) {
       setError(err.response?.data?.message || "Register failed");
     } finally {
