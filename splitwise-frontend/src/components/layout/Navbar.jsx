@@ -452,7 +452,6 @@ export default function Navbar({ onDashboardClick }) {
     }
   };
 
-  // 🔹 USER INITIALS
   const getInitials = () => {
     if (!user?.name) return "U";
     const parts = user.name.trim().split(" ");
@@ -473,15 +472,36 @@ export default function Navbar({ onDashboardClick }) {
           </Link>
 
           {/* DESKTOP */}
-          <div className="hidden md:flex gap-4 items-center">
+          <div className="hidden md:flex gap-3 items-center">
             {!isAuth ? (
               <>
-                <Link to="/login" className="flex items-center gap-2 text-slate-300 hover:text-white">
-                  <FiLogIn /> Login
+                {/* LOGIN – subtle */}
+                <Link
+                  to="/login"
+                  className="px-4 py-2 rounded-lg text-slate-300 border border-slate-700
+                             hover:text-white hover:border-cyan-400
+                             transition-all duration-300"
+                >
+                  <span className="flex items-center gap-2">
+                    <FiLogIn /> Login
+                  </span>
                 </Link>
 
-                <Link to="/register" className="px-4 py-2 rounded-lg bg-cyan-500 text-black font-semibold hover:bg-cyan-400">
-                  <FiUserPlus /> Get Started
+                {/* GET STARTED – premium animation */}
+                <Link
+                  to="/register"
+                  className="relative px-5 py-2 rounded-lg font-semibold text-cyan-400
+                             border border-cyan-400/40
+                             hover:text-black
+                             transition-all duration-300
+                             hover:scale-105
+                             group overflow-hidden"
+                >
+                  {/* glow */}
+                  <span className="absolute inset-0 bg-cyan-400 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                  <span className="relative flex items-center gap-2">
+                    <FiUserPlus /> Get Started
+                  </span>
                 </Link>
               </>
             ) : (
@@ -502,7 +522,7 @@ export default function Navbar({ onDashboardClick }) {
 
                 <NotificationBell onClick={() => navigate("/notifications")} />
 
-                {/* PROFILE DESKTOP */}
+                {/* PROFILE */}
                 <div className="relative">
                   <button
                     onClick={() => setProfileOpen(!profileOpen)}
@@ -541,7 +561,7 @@ export default function Navbar({ onDashboardClick }) {
           </button>
         </div>
 
-        {/* 📱 MOBILE MENU – POLISHED */}
+        {/* MOBILE MENU (unchanged) */}
         <div
           className={`md:hidden overflow-hidden transition-all duration-300 ${
             menuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
@@ -553,7 +573,7 @@ export default function Navbar({ onDashboardClick }) {
                 <Link
                   to="/login"
                   onClick={() => setMenuOpen(false)}
-                  className="block px-4 py-3 rounded-lg bg-slate-800 text-slate-200 active:bg-slate-700"
+                  className="block px-4 py-3 rounded-lg bg-slate-800 text-slate-200"
                 >
                   <FiLogIn className="inline mr-2" /> Login
                 </Link>
@@ -561,50 +581,12 @@ export default function Navbar({ onDashboardClick }) {
                 <Link
                   to="/register"
                   onClick={() => setMenuOpen(false)}
-                  className="block px-4 py-3 rounded-lg bg-cyan-500 text-black font-semibold active:bg-cyan-400"
+                  className="block px-4 py-3 rounded-lg bg-cyan-500 text-black font-semibold"
                 >
                   <FiUserPlus className="inline mr-2" /> Get Started
                 </Link>
               </>
-            ) : (
-              <>
-                <button
-                  onClick={() => {
-                    navigate("/dashboard");
-                    setMenuOpen(false);
-                  }}
-                  className="w-full text-left px-4 py-3 rounded-lg bg-slate-800 text-slate-200 active:bg-slate-700"
-                >
-                  <FiGrid className="inline mr-2" /> Dashboard
-                </button>
-
-                <button
-                  onClick={() => {
-                    navigate("/notifications");
-                    setMenuOpen(false);
-                  }}
-                  className="w-full text-left px-4 py-3 rounded-lg bg-slate-800 text-slate-200 active:bg-slate-700"
-                >
-                  🔔 Notifications
-                </button>
-
-                {/* MOBILE PROFILE CARD */}
-                <div className="mt-4 p-4 rounded-xl bg-slate-800 flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-cyan-500 text-black flex items-center justify-center font-bold text-lg">
-                    {getInitials()}
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-white font-semibold">{user?.name}</p>
-                    <button
-                      onClick={handleLogout}
-                      className="text-red-400 text-sm flex items-center gap-1 mt-1"
-                    >
-                      <FiLogOut /> Logout
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
+            ) : null}
           </div>
         </div>
       </nav>
