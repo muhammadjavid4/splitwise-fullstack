@@ -16,7 +16,7 @@ const app = express();
 // 🔥 CORS — MUST BE BEFORE ROUTES
 app.use(
   cors({
-    origin: "https://splitwise-fullstack.vercel.app/", // frontend
+    origin: "https://splitwise-fullstack.vercel.app", // frontend
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
