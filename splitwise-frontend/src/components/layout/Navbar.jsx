@@ -560,9 +560,74 @@ export default function Navbar({ onDashboardClick }) {
             {menuOpen ? <FiX /> : <FiMenu />}
           </button>
         </div>
+        {/* MOBILE MENU */}
+<div
+  className={`md:hidden overflow-hidden transition-all duration-300 ${
+    menuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+  } bg-slate-900 border-t border-slate-800`}
+>
+  <div className="px-4 py-5 space-y-3">
+
+    {!isAuth ? (
+      <>
+        <Link
+          to="/login"
+          onClick={() => setMenuOpen(false)}
+          className="block px-4 py-3 rounded-lg bg-slate-800 text-slate-200"
+        >
+          <FiLogIn className="inline mr-2" /> Login
+        </Link>
+
+        <Link
+          to="/register"
+          onClick={() => setMenuOpen(false)}
+          className="block px-4 py-3 rounded-lg bg-cyan-500 text-black font-semibold"
+        >
+          <FiUserPlus className="inline mr-2" /> Get Started
+        </Link>
+      </>
+    ) : (
+      <>
+        {/* DASHBOARD */}
+        <button
+          onClick={() => {
+            setMenuOpen(false);
+            navigate("/dashboard");
+          }}
+          className="w-full text-left px-4 py-3 rounded-lg bg-slate-800 text-slate-200"
+        >
+          <FiGrid className="inline mr-2" /> Dashboard
+        </button>
+
+        {/* NOTIFICATIONS */}
+        <button
+          onClick={() => {
+            setMenuOpen(false);
+            navigate("/notifications");
+          }}
+          className="w-full text-left px-4 py-3 rounded-lg bg-slate-800 text-slate-200"
+        >
+          🔔 Notifications
+        </button>
+
+        {/* LOGOUT */}
+        <button
+          onClick={() => {
+            setMenuOpen(false);
+            handleLogout();
+          }}
+          className="w-full text-left px-4 py-3 rounded-lg bg-red-500/10 text-red-400"
+        >
+          <FiLogOut className="inline mr-2" /> Logout
+        </button>
+      </>
+    )}
+
+  </div>
+</div>
 
         {/* MOBILE MENU (unchanged) */}
-        <div
+        {/* <div
           className={`md:hidden overflow-hidden transition-all duration-300 ${
             menuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
           } bg-slate-900 border-t border-slate-800`}
@@ -588,7 +653,7 @@ export default function Navbar({ onDashboardClick }) {
               </>
             ) : null}
           </div>
-        </div>
+        </div> */}
       </nav>
     </>
   );
