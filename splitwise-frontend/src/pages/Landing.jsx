@@ -212,6 +212,7 @@ import {
 } from "react-icons/fa6";
 import { SiLeetcode } from "react-icons/si";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 /* ---------- Animation Variants ---------- */
 const fadeUp = {
@@ -281,18 +282,18 @@ export default function Landing() {
             transition={{ delay: 0.2 }}
             className="mt-10 flex justify-center gap-4"
           >
-            <a
-              href="/register"
+            <Link
+              to="/register"
               className="px-8 py-3 rounded-xl bg-cyan-500 text-black font-semibold hover:bg-cyan-400 hover:scale-105 transition"
             >
               Get Started Free
-            </a>
-            <a
-              href="/login"
+            </Link>
+            <Link
+              to="/login"
               className="px-8 py-3 rounded-xl border border-slate-700 text-white hover:bg-slate-800 transition"
             >
               Login
-            </a>
+            </Link>
           </motion.div>
         </motion.div>
       </section>
@@ -407,12 +408,12 @@ export default function Landing() {
           animate={{ scale: [1, 1.03, 1] }}
           transition={{ repeat: Infinity, duration: 3 }}
         >
-          <a
-            href="./register"
+          <Link
+            to="/register"
             className="px-10 py-4 rounded-2xl bg-cyan-500 text-black font-bold hover:bg-cyan-400 hover:scale-105 transition"
           >
             Start Free
-          </a>
+          </Link>
           <span className="flex items-center gap-2 text-slate-400">
             <FiCheckCircle className="text-cyan-400" />
             No credit card required
