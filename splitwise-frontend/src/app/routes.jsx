@@ -5,6 +5,9 @@ import Login from "../features/auth/Login";
 import Register from "../features/auth/Register";
 import ProtectedRoute from "../components/common/ProtectedRoute";
 import GroupDetails from "../features/groups/GroupDetails";
+import Notifications from "../pages/Notifications";
+
+
 
 export default function AppRoutes() {
     return (
@@ -22,6 +25,7 @@ export default function AppRoutes() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/groups/:groupId" element={<GroupDetails />} />
             </Route>
+            <Route path="/notifications" element={<Notifications />} />
         </Routes>
     );
 }

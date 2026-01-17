@@ -51,3 +51,90 @@ exports.getMyHistory = async (req, res) => {
   }
 };
 
+// controllers/settlement.controller.js
+
+exports.updateMethod = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.params;
+    const { method } = req.body;
+
+    if (!["cash", "UPI"].includes(method)) {
+      throw new Error("Invalid method");
+    }
+
+    await settlementService.updateMethod({
+      id,
+      userId,
+      method,
+    });
+
+    res.json({
+      message: "Settlement method updated",
+    });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+
+exports.undoSettlement = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { id } = req.params;
+
+    await settlementService.undoSettlement({
+      id,
+      userId,
+    });
+
+    res.json({
+      message: "Settlement undone successfully",
+    });
+  } catch (err) {
+    res.status(400).json({
+      message: err.message,
+    });
+  }
+};
+
+// exports.undoSettlement = async (req, res) => {
+//   try {
+//     const userId = req.user.id;
+//     const { id } = req.params;
+
+//     await settlementService.undoSettlement({
+//       id,
+//       userId,
+//     });
+
+//     res.json({
+//       message: "Settlement undone successfully",
+//     });
+//   } catch (err) {
+//     res.status(400).json({
+//       message: err.message,
+//     });
+//   }
+// };
+
+// exports.undoSettlement = async (req, res) => {
+//   try {
+//     const userId = req.user.id;
+//     const { id } = req.params;
+
+//     await settlementService.undoSettlement({
+//       id,
+//       userId,
+//     });
+
+//     res.json({
+//       message: "Settlement undone successfully",
+//     });
+//   } catch (err) {
+//     res.status(400).json({
+//       message: err.message,
+//     });
+//   }
+// };
+

@@ -66,3 +66,27 @@ exports.getUserHistory = async (userId) => {
   );
   return rows;
 };
+
+exports.getById = async (id) => {
+  const [rows] = await db.query(
+    `SELECT * FROM settlements WHERE id = ?`,
+    [id]
+  );
+  return rows[0];
+};
+
+exports.updateStatus = async (id, status) => {
+  await db.query(
+    `UPDATE settlements SET status = ? WHERE id = ?`,
+    [status, id]
+  );
+};
+
+// repos/settlement.repo.js
+
+exports.updateMethod = async (id, method) => {
+  await db.query(
+    `UPDATE settlements SET method = ? WHERE id = ?`,
+    [method, id]
+  );
+};

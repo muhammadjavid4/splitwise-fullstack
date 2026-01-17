@@ -30,7 +30,7 @@
 
 //       <nav className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur border-b border-slate-800">
 //         <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          
+
 //           {/* LOGO */}
 //           <Link
 //             to="/"
@@ -294,6 +294,8 @@ import {
   FiGrid,
   FiLogOut,
 } from "react-icons/fi";
+import NotificationBell from "./NotificationBell";
+
 
 export default function Navbar({ onDashboardClick }) {
   const navigate = useNavigate();
@@ -389,6 +391,10 @@ export default function Navbar({ onDashboardClick }) {
                   `}
                 />
               </button>
+              {/* 🔔 NOTIFICATION BELL */}
+              <NotificationBell
+                onClick={() => navigate("/notifications")}
+              />
 
               {/* LOGOUT */}
               <button

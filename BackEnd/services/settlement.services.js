@@ -83,3 +83,80 @@ exports.getGroupHistory = async ({ groupId, userId }) => {
 exports.getMyHistory = async (userId) => {
   return await settlementRepo.getUserHistory(userId);
 };
+
+
+exports.undoSettlement = async ({ id, userId }) => {
+  // 1️⃣ Get settlement
+  const settlement = await settlementRepo.getById(id);
+
+  if (!settlement || settlement.status !== "completed") {
+    throw new Error("Invalid or already reversed settlement");
+  }
+
+  // 2️⃣ Check group membership
+  const member = await groupRepo.getMember(
+    settlement.group_id,
+    userId
+  );
+
+  if (!member) {
+    throw new Error("Not a group member");
+  }
+
+  // 3️⃣ Permission: creator OR admin
+  if (
+    settlement.created_by !== userId &&
+    member.role !== "admin"
+  ) {
+    throw new Error("Not allowed to undo this settlement");
+  }
+
+  // 4️⃣ Reverse settlement
+  await settlementRepo.updateStatus(id, "reversed");
+
+  // 5️⃣ Activity log
+  await activityService.logActivity({
+    userId,
+    action: "UNDO_SETTLEMENT",
+    metadata: {
+      settlementId: id,
+      amount: settlement.amount,
+    },
+  });
+
+  // 6️⃣ Notify receiver
+  await notificationService.notifyUser({
+    userId: settlement.paid_to,
+    message: `Settlement of ₹${settlement.amount} was reversed`,
+  });
+};
+
+// services/settlement.services.js
+
+exports.updateMethod = async ({ id, userId, method }) => {
+  const settlement = await settlementRepo.getById(id);
+
+  if (!settlement || settlement.status !== "completed") {
+    throw new Error("Invalid settlement");
+  }
+
+  const member = await groupRepo.getMember(
+    settlement.group_id,
+    userId
+  );
+
+  if (!member) {
+    throw new Error("Not a group member");
+  }
+
+  // ✅ only creator OR admin
+  if (
+    settlement.created_by !== userId &&
+    member.role !== "admin"
+  ) {
+    throw new Error("Not allowed");
+  }
+
+  await settlementRepo.updateMethod(id, method);
+};
+
