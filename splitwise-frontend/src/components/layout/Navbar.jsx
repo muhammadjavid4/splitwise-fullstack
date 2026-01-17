@@ -431,6 +431,7 @@ import {
   FiChevronDown,
 } from "react-icons/fi";
 import NotificationBell from "./NotificationBell";
+import toast from "react-hot-toast";
 
 export default function Navbar({ onDashboardClick }) {
   const navigate = useNavigate();
@@ -615,6 +616,7 @@ export default function Navbar({ onDashboardClick }) {
           onClick={() => {
             setMenuOpen(false);
             handleLogout();
+            toast.success("Logged out successfully");
           }}
           className="w-full text-left px-4 py-3 rounded-lg bg-red-500/10 text-red-400"
         >
